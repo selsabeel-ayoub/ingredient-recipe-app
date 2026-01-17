@@ -3,14 +3,9 @@ import FridgeGrid from '../components/FridgeGrid';
 
 export default function Home() {
   return (
-    <View style={styles.container}>
+    // This View MUST have flex: 1 to show the grid
+    <View style={{ flex: 1 }}> 
       <FridgeGrid />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1, // tells screen to use the full height
-  },
-});
