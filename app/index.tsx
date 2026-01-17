@@ -1,13 +1,16 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, View } from "react-native";
+import FridgeGrid from '../components/FridgeGrid';  
 
 export default function Home() {
   return (
-    <Text style={styles.container}>Hi</Text>
-  )
+    <View style={styles.container}>
+      <FridgeGrid />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
+    flex: 1, // tells screen to use the full height
   },
-})
+});
