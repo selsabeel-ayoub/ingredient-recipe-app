@@ -1,28 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { FridgeItem } from './FridgeItem'; 
 import { AddButton } from './AddButton';
-import { RecipeModal } from './RecipeModal'; // New Import
-import { generateFridgeRecipe } from '../services/geminiService';
+import { RecipeModal } from './RecipeModal';
+import { useFridge } from '../hooks/useFridge';
+import { globalStyles as styles, theme } from '../styles/theme';
+import { generateFridgeRecipe } from '../services/geminiService'; // Ensure this matches your service file
 
 export default function FridgeGrid() {
-  const [items, setItems] = useState(['Carrots', 'Milk', 'Apple', "Eggplant", "Soysauce", "Cocoa Powder"]);
-  const [recipe, setRecipe] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const removeItem = (name: string) => setItems(prev => prev.filter(i => i !== name));
-  const addItem = () => setItems(prev => [...prev, 'New Item']);
-
-  const handleGetRecipe = async () => {
-    if (!items.length) return Alert.alert("Fridge Empty", "Add ingredients first!");
-
-    setLoading(true);
-    const data = await generateFridgeRecipe(items);
-    setLoading(false);
-
-    if (data) setRecipe(data);
-    else Alert.alert("Try Again", "The AI is busy. Please wait 30 seconds.");
-  };
+  const { items, recipe, loading, removeItem, addItem, getRecipe, setRecipe } = 
+    useFridge(['Carrots', 'Milk', 'Apple', "Eggplant", "Soysauce", "Cocoa Powder"]);
 
   return (
     <View style={styles.container}>
@@ -32,32 +19,29 @@ export default function FridgeGrid() {
         data={items}
         numColumns={3}
         columnWrapperStyle={styles.shelf}
-        renderItem={({ item }) => <FridgeItem name={item} onRemove={() => removeItem(item)} />}
+        renderItem={({ item }) => (
+          <FridgeItem name={item} onRemove={() => removeItem(item)} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
       />
 
       <TouchableOpacity 
-        style={[styles.recipeButton, loading && { backgroundColor: '#a5d6a7' }]} 
-        onPress={handleGetRecipe}
+        style={[styles.actionButton, { backgroundColor: loading ? theme.colors.secondary : theme.colors.primary }]} 
+        onPress={getRecipe}
         disabled={loading}
       >
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.recipeButtonText}>Generate Recipe</Text>}
+        {loading ? (
+          <ActivityIndicator color={theme.colors.text} />
+        ) : (
+          <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
+            Generate Recipe
+          </Text>
+        )}
       </TouchableOpacity>
 
       <AddButton onPress={addItem} />
 
-      <RecipeModal 
-        visible={!!recipe} 
-        recipe={recipe} 
-        onClose={() => setRecipe(null)} 
-      />
+      <RecipeModal visible={!!recipe} recipe={recipe} onClose={() => setRecipe(null)} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff', paddingTop: 60 },
-  header: { fontSize: 40, fontWeight: 'bold', textAlign: 'center', marginBottom: 20 },
-  shelf: { justifyContent: 'flex-start', borderBottomWidth: 4, borderBottomColor: '#333', marginBottom: 20 },
-  recipeButton: { backgroundColor: '#4CAF50', padding: 18, borderRadius: 12, alignItems: 'center', marginVertical: 15 },
-  recipeButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 18 },
-});
