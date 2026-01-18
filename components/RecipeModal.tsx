@@ -23,8 +23,21 @@ export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, 
     if (!text) return '';
     // Convert to string if it's not already
     const textStr = typeof text === 'string' ? text : String(text);
-    // Add space after periods if missing
-    return textStr.replace(/\.([A-Z])/g, '. $1');
+    
+    // First, remove any duplicate punctuation (.,  or ..)
+    let formatted = textStr.replace(/\.,/g, '.');
+    formatted = formatted.replace(/\.\./g, '.');
+    
+    // Replace comma followed by capital letter with period + space (sentence boundary)
+    formatted = formatted.replace(/,([A-Z])/g, '. $1');
+    
+    // Replace periods followed immediately by a capital letter with period + space
+    formatted = formatted.replace(/\.([A-Z])/g, '. $1');
+    
+    // Replace any other missing spaces after punctuation
+    formatted = formatted.replace(/([.!?])([A-Z])/g, '$1 $2');
+    
+    return formatted;
   };
 
   // If a recipe is selected, show the full recipe view
