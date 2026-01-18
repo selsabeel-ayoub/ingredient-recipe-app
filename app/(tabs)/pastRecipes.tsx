@@ -1,4 +1,4 @@
-import RecipeCard from '@/components/RecipeCard';
+import RecipeCard from '@/components/recipeCard';
 import { globalStyles as styles } from '@/styles/theme';
 import { ScrollView, Text } from 'react-native';
 
