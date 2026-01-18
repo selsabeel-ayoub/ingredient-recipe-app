@@ -17,12 +17,16 @@ export default function NewIngredient() {
 
   const handleSave = () => {
     if (ingredientName.trim()) {
+      // Create a unique timestamp for each addition
+      const timestamp = Date.now().toString();
+      
       router.push({
         pathname: '/(tabs)',
         params: {
           newIngredient: ingredientName.trim(),
           quantity: quantity,
-          unit: selectedUnit
+          unit: selectedUnit,
+          timestamp: timestamp // Add timestamp to make each navigation unique
         }
       });
     }
