@@ -13,8 +13,8 @@ export default function Header() {
         <TouchableOpacity
         style={styles.headerButton}
         onPress={() => {
-            router.push('/aboutUs');
-            console.log('Going to About Us!');
+            router.back();
+            console.log('Going to Main Menu!');
         }}
         >
         <Text style={styles.headerButtonText}>About Us</Text>

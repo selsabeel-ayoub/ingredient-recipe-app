@@ -22,8 +22,16 @@ export default function Login() {
   };
 
   const handleSignUp = () => {
-    // Add your sign up logic here
-    console.log('Sign up clicked');
+    // Add your login logic here
+    if (username.length > 0 && password.length > 0) {
+      console.log('Login attempt:', username);
+      setErrorMessage(""); // Clear error message on successful login
+      // For now, just navigate back to home
+      router.back();
+    } else {
+      console.log('Please enter both username and password.');
+      setErrorMessage('ERROR 506: Please fill both Username and Password!');
+    }
   };
 
   return (
