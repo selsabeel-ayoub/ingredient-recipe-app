@@ -3,9 +3,9 @@ import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, Alert } from
 import { FridgeItem } from './FridgeItem'; 
 import { AddButton } from './AddButton';
 import { RecipeModal } from './RecipeModal';
+import { LoadingScreen } from './LoadingScreen';
 import { useFridge } from '../hooks/useFridge';
 import { globalStyles as styles, theme } from '../styles/theme';
-import { generateFridgeRecipe } from '../services/geminiService';
 
 export default function FridgeGrid() {
   const { 
@@ -35,20 +35,18 @@ export default function FridgeGrid() {
       />
 
       <TouchableOpacity 
-        style={[styles.actionButton, { backgroundColor: loading ? theme.colors.secondary : theme.colors.primary }]} 
+        style={[styles.actionButton, { backgroundColor: theme.colors.primary }]} 
         onPress={getRecipe}
         disabled={loading}
       >
-        {loading ? (
-          <ActivityIndicator color={theme.colors.text} />
-        ) : (
-          <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
-            Generate Recipes
-          </Text>
-        )}
+        <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
+          Generate Recipes
+        </Text>
       </TouchableOpacity>
 
       <AddButton onPress={addItem} />
+
+      <LoadingScreen visible={loading} />
 
       <RecipeModal 
         visible={recipes.length > 0} 
