@@ -28,7 +28,7 @@ ChefSSS is an AI-powered culinary assistant designed to make cooking and decisio
   - AI Prompting: We learned how to "talk" to LLMs to get exactly the structured data we need for a user interface.
   - TypeScript Mastery: We learned the importance of strict type-checking to catch bugs in ingredient units and recipe objects before they reached the user.
 
-What's next for ChefSSS:
+## What's next for ChefSSS:
   - Social Sharing: Allowing students to share their recipes with friends.
-    Grocery Integration: Automatically creating shopping lists for the "missing" ingredients needed for a specific recipe.
-
+  - Grocery Integration: Automatically creating shopping lists for the "missing" ingredients needed for a specific recipe.
+  - Improved Recipes: Include extra elements such as portion size, time and a nice image of the expected product
