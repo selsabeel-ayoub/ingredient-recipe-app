@@ -9,7 +9,12 @@ export const useFridge = (initialItems: string[]) => {
   const [loading, setLoading] = useState(false);
 
   const removeItem = (name: string) => setItems(prev => prev.filter(i => i !== name));
-  const addItem = () => setItems(prev => [...prev, 'New Item']);
+  
+  const addItem = (itemName?: string) => {
+    const newItem = itemName || 'New Item';
+    setItems(prev => [...prev, newItem]);
+    console.log('Adding item:', newItem); // Debug log
+  };
 
   const getRecipe = async () => {
     if (!items.length) return Alert.alert("Fridge Empty", "Add ingredients first!");

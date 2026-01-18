@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, ActivityIndicator } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
 import { theme } from '../styles/theme';
@@ -9,13 +9,26 @@ interface LoadingScreenProps {
 
 export const LoadingScreen = ({ visible }: LoadingScreenProps) => {
   const [videoError, setVideoError] = useState(false);
+  const [videoSource, setVideoSource] = useState(require('../assets/images/loading.mp4'));
+  
+  // Randomly choose a video each time the modal becomes visible
+  useEffect(() => {
+    if (visible) {
+      const videos = [
+        require('../assets/images/loading.mp4'),
+        require('../assets/images/chicken.mp4'),
+      ];
+      const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+      setVideoSource(randomVideo);
+    }
+  }, [visible]);
 
   return (
     <Modal visible={visible} animationType="fade" transparent={false}>
       <View style={styles.container}>
         {!videoError ? (
           <Video
-            source={require('../assets/images/loading.mp4')}
+            source={videoSource}
             style={styles.video}
             resizeMode={ResizeMode.COVER}
             shouldPlay

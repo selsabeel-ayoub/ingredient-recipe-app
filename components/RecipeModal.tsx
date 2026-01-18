@@ -15,27 +15,41 @@ export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, 
   if (selectedRecipe) {
     return (
       <Modal visible={visible} animationType="slide">
-        <View style={styles.modalContent}>
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <TouchableOpacity 
-              onPress={() => onSelectRecipe(null)} 
-              style={styles.backButton}
-            >
-              <Text style={styles.backButtonText}>← Back to Options</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.recipeTitle}>{selectedRecipe.name}</Text>
+        <View style={styles.recipeModalContainer}>
+          <ScrollView 
+            contentContainerStyle={styles.recipeScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.recipeHeader}>
+              <TouchableOpacity 
+                onPress={() => onSelectRecipe(null)} 
+                style={styles.recipeBackButton}
+              >
+                <Text style={styles.recipeBackButtonText}>← Back</Text>
+              </TouchableOpacity>
+              
+              <Text style={styles.selectedRecipeTitle}>{selectedRecipe.name}</Text>
+            </View>
             
-            <Text style={styles.sectionHeader}>Ingredients:</Text>
-            {selectedRecipe.ingredients?.map((ing: string, i: number) => (
-              <Text key={i} style={styles.bodyText}>• {ing}</Text>
-            ))}
+            <View style={styles.recipeSection}>
+              <Text style={styles.recipeSectionTitle}>Ingredients</Text>
+              <View style={styles.ingredientsList}>
+                {selectedRecipe.ingredients?.map((ing: string, i: number) => (
+                  <View key={i} style={styles.ingredientItem}>
+                    <View style={styles.bulletPoint} />
+                    <Text style={styles.ingredientText}>{ing}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
             
-            <Text style={styles.sectionHeader}>Instructions:</Text>
-            <Text style={styles.bodyText}>{selectedRecipe.instructions}</Text>
+            <View style={styles.recipeSection}>
+              <Text style={styles.recipeSectionTitle}>Instructions</Text>
+              <Text style={styles.instructionsText}>{selectedRecipe.instructions}</Text>
+            </View>
             
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Close</Text>
+            <TouchableOpacity onPress={onClose} style={styles.recipeCloseButton}>
+              <Text style={styles.recipeCloseButtonText}>Done</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -46,23 +60,34 @@ export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, 
   // Show recipe options
   return (
     <Modal visible={visible} animationType="slide">
-      <View style={styles.modalContent}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.recipeTitle}>Choose a Recipe</Text>
+      <View style={styles.recipeModalContainer}>
+        <ScrollView 
+          contentContainerStyle={styles.recipeScrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.chooseRecipeTitle}>Choose Your Recipe</Text>
+          <Text style={styles.chooseRecipeSubtitle}>Pick one of these delicious options</Text>
           
-          {recipes.map((recipe, index) => (
-            <TouchableOpacity 
-              key={index}
-              style={styles.recipeOption}
-              onPress={() => onSelectRecipe(recipe)}
-            >
-              <Text style={styles.recipeOptionTitle}>{recipe.name}</Text>
-              <Text style={styles.recipeOptionArrow}>→</Text>
-            </TouchableOpacity>
-          ))}
+          <View style={styles.recipeOptionsContainer}>
+            {recipes.map((recipe, index) => (
+              <TouchableOpacity 
+                key={index}
+                style={styles.recipeBookCard}
+                onPress={() => onSelectRecipe(recipe)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.bookSpine} />
+                <View style={styles.bookContent}>
+                  <Text style={styles.recipeBookNumber}>Recipe {index + 1}</Text>
+                  <Text style={styles.recipeBookTitle}>{recipe.name}</Text>
+                  <Text style={styles.tapToOpen}>Tap to open →</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
           
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>Close</Text>
+          <TouchableOpacity onPress={onClose} style={styles.recipeOptionsCloseButton}>
+            <Text style={styles.recipeOptionsCloseButtonText}>Cancel</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>

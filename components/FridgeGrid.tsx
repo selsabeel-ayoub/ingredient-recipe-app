@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
 import { FridgeItem } from './FridgeItem'; 
 import { AddButton } from './AddButton';
 import { RecipeModal } from './RecipeModal';
 import { LoadingScreen } from './LoadingScreen';
 import { useFridge } from '../hooks/useFridge';
 import { globalStyles as styles, theme } from '../styles/theme';
+import { generateFridgeRecipe } from '../services/geminiService';
 
 export default function FridgeGrid() {
+  const params = useLocalSearchParams();
   const { 
     items, 
     recipes, 
@@ -20,8 +23,21 @@ export default function FridgeGrid() {
     closeRecipes 
   } = useFridge(['Carrots', 'Milk', 'Apple', "Eggplant", "Soysauce", "Cocoa Powder"]);
 
+  // Listen for new ingredients from the add page
+  useEffect(() => {
+    console.log('Params received:', params); // Debug log
+    if (params.newIngredient && typeof params.newIngredient === 'string') {
+      console.log('Adding new ingredient:', params.newIngredient); // Debug log
+      addItem(params.newIngredient);
+    }
+  }, [params.newIngredient]);
+
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source={require('../assets/images/fridge.png')} 
+      style={styles.container}
+      resizeMode="cover"
+    >
       <Text style={styles.header}>Fridge</Text>
       
       <FlatList
@@ -44,7 +60,7 @@ export default function FridgeGrid() {
         </Text>
       </TouchableOpacity>
 
-      <AddButton onPress={addItem} />
+      <AddButton />
 
       <LoadingScreen visible={loading} />
 
@@ -55,6 +71,6 @@ export default function FridgeGrid() {
         onSelectRecipe={setSelectedRecipe}
         onClose={closeRecipes} 
       />
-    </View>
+    </ImageBackground>
   );
 }
