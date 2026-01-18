@@ -8,15 +8,13 @@ interface RecipeCardProps {
     instructions: string;
 }
 
-export default function RecipeCard({ name, time, portion, ingredients, instructions }: RecipeCardProps) {
+export default function RecipeCard({ name, ingredients, instructions }: RecipeCardProps) {
 
     return (
         <>
         {/* Recipe Card Component */}
         <View style={styles.card}>
             <Text style={styles.cardTitle}>{name}</Text>
-            <Text style={styles.cardDetails}>Time: {time}</Text>
-            <Text style={styles.cardDetails}>Portion: {portion}</Text>
             <Text style={styles.cardDetails}>Ingredients: {ingredients.join(', ')}</Text>
             <Text style={styles.cardDetails}>Instructions: {instructions}</Text>
         </View>
