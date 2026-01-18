@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Modal, ScrollView, TouchableOpacity, ImageBackground, Alert } from 'react-native';
+import { View, Text, Modal, ScrollView, TouchableOpacity } from 'react-native';
 import { globalStyles as styles, theme } from '../styles/theme';
 
 interface RecipeModalProps {
@@ -8,92 +8,51 @@ interface RecipeModalProps {
   selectedRecipe: any;
   onSelectRecipe: (recipe: any) => void;
   onClose: () => void;
-  onBookmark?: (recipe: any) => void;
 }
 
-export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, onClose, onBookmark }: RecipeModalProps) => {
-  const handleBookmark = () => {
-    if (onBookmark && selectedRecipe) {
-      onBookmark(selectedRecipe);
-    }
-  };
-
-  // Function to clean up instruction formatting
-  const formatInstructions = (text: any) => {
-    if (!text) return '';
-    // Convert to string if it's not already
-    const textStr = typeof text === 'string' ? text : String(text);
-    
-    // Replace comma followed by capital letter with period + space (sentence boundary)
-    let formatted = textStr.replace(/,([A-Z])/g, '. $1');
-    
-    // Replace periods followed immediately by a capital letter with period + space
-    formatted = formatted.replace(/\.([A-Z])/g, '. $1');
-    
-    // Replace any other missing spaces after punctuation
-    formatted = formatted.replace(/([.!?])([A-Z])/g, '$1 $2');
-    
-    return formatted;
-  };
-
+export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, onClose }: RecipeModalProps) => {
   // If a recipe is selected, show the full recipe view
   if (selectedRecipe) {
     return (
       <Modal visible={visible} animationType="slide">
-        <ImageBackground 
-          source={require('../assets/images/flowers-bg.png')}
-          style={styles.recipeModalContainer}
-          resizeMode="cover"
-        >
-          <View style={styles.overlay}>
-            <ScrollView 
-              contentContainerStyle={styles.recipeScrollContent}
-              showsVerticalScrollIndicator={false}
-            >
-              <View style={styles.recipeHeader}>
-                <TouchableOpacity 
-                  onPress={() => onSelectRecipe(null)} 
-                  style={styles.recipeBackButton}
-                >
-                  <Text style={styles.recipeBackButtonText}>← Back</Text>
-                </TouchableOpacity>
-                
-                <Text style={styles.selectedRecipeTitle} numberOfLines={3}>
-                  {selectedRecipe.name}
-                </Text>
-              </View>
-              
-              <View style={styles.recipeSection}>
-                <Text style={styles.recipeSectionTitle}>Ingredients</Text>
-                <View style={styles.ingredientsList}>
-                  {selectedRecipe.ingredients?.map((ing: string, i: number) => (
-                    <View key={i} style={styles.ingredientItem}>
-                      <View style={styles.bulletPoint} />
-                      <Text style={styles.ingredientText}>{ing}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-              
-              <View style={styles.recipeSection}>
-                <Text style={styles.recipeSectionTitle}>Instructions</Text>
-                <Text style={styles.instructionsText}>
-                  {formatInstructions(selectedRecipe.instructions)}
-                </Text>
-              </View>
-              
-              {onBookmark && (
-                <TouchableOpacity onPress={handleBookmark} style={styles.bookmarkButton}>
-                  <Text style={styles.bookmarkButtonText}>⭐ Save to Recipe Book</Text>
-                </TouchableOpacity>
-              )}
-
-              <TouchableOpacity onPress={onClose} style={styles.recipeCloseButton}>
-                <Text style={styles.recipeCloseButtonText}>Done</Text>
+        <View style={styles.recipeModalContainer}>
+          <ScrollView 
+            contentContainerStyle={styles.recipeScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.recipeHeader}>
+              <TouchableOpacity 
+                onPress={() => onSelectRecipe(null)} 
+                style={styles.recipeBackButton}
+              >
+                <Text style={styles.recipeBackButtonText}>← Back</Text>
               </TouchableOpacity>
-            </ScrollView>
-          </View>
-        </ImageBackground>
+              
+              <Text style={styles.selectedRecipeTitle}>{selectedRecipe.name}</Text>
+            </View>
+            
+            <View style={styles.recipeSection}>
+              <Text style={styles.recipeSectionTitle}>Ingredients</Text>
+              <View style={styles.ingredientsList}>
+                {selectedRecipe.ingredients?.map((ing: string, i: number) => (
+                  <View key={i} style={styles.ingredientItem}>
+                    <View style={styles.bulletPoint} />
+                    <Text style={styles.ingredientText}>{ing}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
+            
+            <View style={styles.recipeSection}>
+              <Text style={styles.recipeSectionTitle}>Instructions</Text>
+              <Text style={styles.instructionsText}>{selectedRecipe.instructions}</Text>
+            </View>
+            
+            <TouchableOpacity onPress={onClose} style={styles.recipeCloseButton}>
+              <Text style={styles.recipeCloseButtonText}>Done</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </Modal>
     );
   }
@@ -101,45 +60,37 @@ export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, 
   // Show recipe options
   return (
     <Modal visible={visible} animationType="slide">
-      <ImageBackground 
-        source={require('../assets/images/flowers-bg.png')}
-        style={styles.recipeModalContainer}
-        resizeMode="cover"
-      >
-        <View style={styles.overlay}>
-          <ScrollView 
-            contentContainerStyle={styles.recipeScrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            <Text style={styles.chooseRecipeTitle}>Choose Your Recipe</Text>
-            <Text style={styles.chooseRecipeSubtitle}>Pick one of these delicious options</Text>
-            
-            <View style={styles.recipeOptionsContainer}>
-              {recipes.map((recipe, index) => (
-                <TouchableOpacity 
-                  key={index}
-                  style={styles.recipeBookCard}
-                  onPress={() => onSelectRecipe(recipe)}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.bookSpine} />
-                  <View style={styles.bookContent}>
-                    <Text style={styles.recipeBookNumber}>Recipe {index + 1}</Text>
-                    <Text style={styles.recipeBookTitle} numberOfLines={2} ellipsizeMode="tail">
-                      {recipe.name}
-                    </Text>
-                    <Text style={styles.tapToOpen}>Tap to open →</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-            
-            <TouchableOpacity onPress={onClose} style={styles.recipeOptionsCloseButton}>
-              <Text style={styles.recipeOptionsCloseButtonText}>Cancel</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </ImageBackground>
+      <View style={styles.recipeModalContainer}>
+        <ScrollView 
+          contentContainerStyle={styles.recipeScrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={styles.chooseRecipeTitle}>Choose Your Recipe</Text>
+          <Text style={styles.chooseRecipeSubtitle}>Pick one of these delicious options</Text>
+          
+          <View style={styles.recipeOptionsContainer}>
+            {recipes.map((recipe, index) => (
+              <TouchableOpacity 
+                key={index}
+                style={styles.recipeBookCard}
+                onPress={() => onSelectRecipe(recipe)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.bookSpine} />
+                <View style={styles.bookContent}>
+                  <Text style={styles.recipeBookNumber}>Recipe {index + 1}</Text>
+                  <Text style={styles.recipeBookTitle}>{recipe.name}</Text>
+                  <Text style={styles.tapToOpen}>Tap to open →</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+          
+          <TouchableOpacity onPress={onClose} style={styles.recipeOptionsCloseButton}>
+            <Text style={styles.recipeOptionsCloseButtonText}>Cancel</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </Modal>
   );
 };
