@@ -112,5 +112,43 @@ export const globalStyles = StyleSheet.create({
   closeButtonText: { 
     color: '#fff', 
     fontWeight: 'bold' 
-  }
+  },
+  recipeOption: {
+    backgroundColor: theme.colors.card,
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 15,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    elevation: 1,
+  },
+  recipeOptionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: theme.colors.text,
+    flex: 1,
+  },
+  recipeOptionArrow: {
+    fontSize: 24,
+    color: '#D48181',
+    fontWeight: 'bold',
+  },
+  backButton: {
+    marginBottom: 15,
+    padding: 12,
+    backgroundColor: theme.colors.secondary,
+    borderRadius: 10,
+    alignSelf: 'flex-start',
+  },
+  backButtonText: {
+    color: theme.colors.text,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
