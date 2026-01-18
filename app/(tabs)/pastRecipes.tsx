@@ -1,29 +1,50 @@
-import RecipeCard from '@/components/RecipeCard';
+import RecipeCard from '@/Components/recipeCard';
 import { globalStyles as styles } from '@/styles/theme';
-import { ScrollView, Text } from 'react-native';
+import { ScrollView, Text, ImageBackground, View } from 'react-native';
+import { useSavedRecipes } from '@/hooks/useSavedRecipes';
 
 export default function pastRecipes() {
-    const pastRecipesList = [
-        { id: 1, name: "Pasta Carbonara", time: "30 mins", portion: "4 servings", ingredients: ["Pasta", "Eggs", "Bacon"], instructions: "Cook pasta, mix with eggs and bacon." },
-        { id: 2, name: "Chicken Stir Fry", time: "25 mins", portion: "4 servings", ingredients: ["Chicken", "Bell Peppers", "Soy Sauce"], instructions: "Stir fry chicken and vegetables in soy sauce." },
-        { id: 3, name: "Vegetable Soup", time: "45 mins", portion: "6 servings", ingredients: ["Carrots", "Celery", "Onions", "Broth"], instructions: "Simmer vegetables in broth until tender." },
-        { id: 4, name: "Beef Tacos", time: "20 mins", portion: "4 servings", ingredients: ["Ground Beef", "Taco Shells", "Lettuce", "Cheese"], instructions: "Cook beef and assemble tacos with toppings." },
-        { id: 5, name: "Grilled Cheese Sandwich", time: "10 mins", portion: "1 serving", ingredients: ["Bread", "Cheese", "Butter"], instructions: "Butter bread, add cheese, and grill until golden." },
-        { id: 6, name: "Caesar Salad", time: "15 mins", portion: "2 servings", ingredients: ["Romaine Lettuce", "Croutons", "Caesar Dressing"], instructions: "Toss lettuce with croutons and dressing." },
-        { id: 7, name: "Pancakes", time: "20 mins", portion: "4 servings", ingredients: ["Flour", "Eggs", "Milk", "Baking Powder"], instructions: "Mix ingredients and cook on griddle." },
-        { id: 8, name: "Spaghetti Bolognese", time: "40 mins", portion: "4 servings", ingredients: ["Spaghetti", "Ground Beef", "Tomato Sauce"], instructions: "Cook spaghetti and top with meat sauce." },
-        { id: 9, name: "Fruit Smoothie", time: "10 mins", portion: "2 servings", ingredients: ["Mixed Fruits", "Yogurt", "Honey"], instructions: "Blend all ingredients until smooth." },
-        { id: 10, name: "Omelette", time: "15 mins", portion: "1 serving", ingredients: ["Eggs", "Cheese", "Vegetables"], instructions: "Beat eggs, add fillings, and cook in pan." },
-    ];
+    const { savedRecipes } = useSavedRecipes();
 
-    const recipeCards = pastRecipesList.map(recipe => (
-        <RecipeCard key={recipe.id} name={recipe.name} time={recipe.time} portion={recipe.portion} ingredients={recipe.ingredients} instructions={recipe.instructions} />
-    ));
+    const recipeCards = savedRecipes.length > 0 ? (
+        savedRecipes.map(recipe => (
+            <RecipeCard 
+                key={recipe.id} 
+                name={recipe.name} 
+                ingredients={recipe.ingredients} 
+                instructions={recipe.instructions} 
+            />
+        ))
+    ) : (
+        <View style={{ alignItems: 'center', marginTop: 40 }}>
+            <Text style={[styles.chooseRecipeSubtitle, { fontSize: 18 }]}>
+                No saved recipes yet
+            </Text>
+            <Text style={[styles.chooseRecipeSubtitle, { marginTop: 10 }]}>
+                Generate and bookmark recipes from your fridge!
+            </Text>
+        </View>
+    );
 
     return (
-      <>
-        <Text style={styles.header}>Recipe Book</Text>
-        <ScrollView>{recipeCards}</ScrollView>
-      </>
+        <ImageBackground 
+            source={require('@/assets/images/flowers-bg.png')}
+            style={styles.recipeModalContainer}
+            resizeMode="cover"
+        >
+            <View style={styles.overlay}>
+                <ScrollView 
+                    contentContainerStyle={styles.recipeScrollContent}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <Text style={styles.chooseRecipeTitle}>Recipe Book</Text>
+                    <Text style={styles.chooseRecipeSubtitle}>Your saved recipes</Text>
+                    
+                    <View style={styles.recipeOptionsContainer}>
+                        {recipeCards}
+                    </View>
+                </ScrollView>
+            </View>
+        </ImageBackground>
     );
 }

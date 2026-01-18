@@ -1,74 +1,105 @@
-import { useRouter } from "expo-router";
-import { useState } from "react";
-import { View, Text, ScrollView, TextInput, TouchableOpacity, Alert } from "react-native";
-import { globalStyles as styles } from "../styles/theme";
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Stack } from 'expo-router';
+import { globalStyles as styles } from '@/styles/theme';
 
-export default function AddIngredient() {
+const UNITS = [
+  'piece', 'cup', 'gram', 'ounce', 'liter', 'milliliter',
+  'tablespoon', 'teaspoon', 'pound', 'kilogram', 'slice', 'can'
+];
+
+export default function NewIngredient() {
   const router = useRouter();
-  const [ingredientName, setIngredientName] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [notes, setNotes] = useState("");
-  
+  const [ingredientName, setIngredientName] = useState('');
+  const [quantity, setQuantity] = useState('1');
+  const [selectedUnit, setSelectedUnit] = useState('piece');
+
   const handleSave = () => {
-    if (!ingredientName.trim()) {
-      Alert.alert("Error", "Please enter an ingredient name");
-      return;
+    if (ingredientName.trim()) {
+      router.push({
+        pathname: '/(tabs)',
+        params: {
+          newIngredient: ingredientName.trim(),
+          quantity: quantity,
+          unit: selectedUnit
+        }
+      });
     }
-    
-    // Combine name and quantity if provided
-    const fullIngredient = quantity.trim() 
-      ? `${ingredientName.trim()} (${quantity.trim()})`
-      : ingredientName.trim();
-    
-    // Navigate back with the new ingredient as a query parameter
-    router.push({
-      pathname: '/',
-      params: { newIngredient: fullIngredient }
-    });
   };
-  
+
+  const handleCancel = () => {
+    router.back();
+  };
+
   return (
-    <ScrollView style={styles.pageContainer}>
-      <Text style={styles.pageTitle}>Add New Ingredient</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Enter ingredient name"
-        placeholderTextColor="#E8B4B4"
-        value={ingredientName}
-        onChangeText={setIngredientName}
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Enter quantity"
-        placeholderTextColor="#E8B4B4"
-        value={quantity}
-        onChangeText={setQuantity}
-      />
-      
-      <TextInput
-        style={[styles.input, styles.notesInput]}
-        placeholder="Add notes (optional)"
-        placeholderTextColor="#E8B4B4"
-        value={notes}
-        onChangeText={setNotes}
-        multiline
-      />
-      
-      <TouchableOpacity
-        style={styles.saveButton}
-        onPress={handleSave}
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <ImageBackground 
+        source={require('@/assets/images/flowers-bg.png')}
+        style={styles.container}
+        resizeMode="cover"
       >
-        <Text style={styles.buttonText}>Save Ingredient</Text>
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        style={styles.cancelButton}
-        onPress={() => router.back()}
-      >
-        <Text style={styles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <View style={[styles.overlay, { paddingTop: 50 }]}>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 20 }}>
+            <Text style={[styles.pageTitle, { paddingTop: 20, paddingBottom: 20 }]}>Add New Ingredient</Text>
+            
+            <Text style={styles.inputLabel}>Ingredient Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="e.g., Carrots, Milk, Eggs"
+              value={ingredientName}
+              onChangeText={setIngredientName}
+              placeholderTextColor="#C4A4A4"
+            />
+
+            <Text style={styles.inputLabel}>Quantity</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter quantity"
+              value={quantity}
+              onChangeText={setQuantity}
+              keyboardType="number-pad"
+              placeholderTextColor="#C4A4A4"
+            />
+
+            <Text style={styles.inputLabel}>Unit</Text>
+            <View style={[styles.unitGrid, { marginBottom: 25 }]}>
+              {UNITS.map((unit) => (
+                <TouchableOpacity
+                  key={unit}
+                  style={[
+                    styles.unitButton,
+                    selectedUnit === unit && styles.unitButtonSelected
+                  ]}
+                  onPress={() => setSelectedUnit(unit)}
+                >
+                  <Text style={[
+                    styles.unitButtonText,
+                    selectedUnit === unit && styles.unitButtonTextSelected
+                  ]}>
+                    {unit}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity 
+              style={styles.saveButton} 
+              onPress={handleSave}
+            >
+              <Text style={styles.buttonText}>Add to Fridge</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.cancelButton} 
+              onPress={handleCancel}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </ImageBackground>
+    </>
   );
 }
