@@ -15,9 +15,14 @@ export const theme = {
 export const globalStyles = StyleSheet.create({
   container: { 
     flex: 1, 
-    padding: 20, 
     backgroundColor: theme.colors.background, 
-    paddingTop: 60 
+  },
+  // NEW: Add this overlay style
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.76)',  
+    padding: 20,
+    paddingTop: 60,
   },
   header: { 
     fontSize: 40, 
@@ -38,6 +43,8 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     marginVertical: 15,
+    borderWidth: 3,
+    borderColor: theme.colors.border,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,

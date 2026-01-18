@@ -34,33 +34,35 @@ export default function FridgeGrid() {
 
   return (
     <ImageBackground 
-      source={require('../assets/images/fridge.png')} 
+      source={require('../assets/images/flowers-bg.png')} 
       style={styles.container}
       resizeMode="cover"
     >
-      <Text style={styles.header}>Fridge</Text>
-      
-      <FlatList
-        data={items}
-        numColumns={3}
-        columnWrapperStyle={styles.shelf}
-        renderItem={({ item }) => (
-          <FridgeItem name={item} onRemove={() => removeItem(item)} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <View style={styles.overlay}>
+        <Text style={styles.header}>Fridge</Text>
+        
+        <FlatList
+          data={items}
+          numColumns={3}
+          columnWrapperStyle={styles.shelf}
+          renderItem={({ item }) => (
+            <FridgeItem name={item} onRemove={() => removeItem(item)} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
 
-      <TouchableOpacity 
-        style={[styles.actionButton, { backgroundColor: theme.colors.primary }]} 
-        onPress={getRecipe}
-        disabled={loading}
-      >
-        <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
-          Generate Recipes
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.actionButton, { backgroundColor: theme.colors.primary }]} 
+          onPress={getRecipe}
+          disabled={loading}
+        >
+          <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
+            Generate Recipes
+          </Text>
+        </TouchableOpacity>
 
-      <AddButton />
+        <AddButton />
+      </View>
 
       <LoadingScreen visible={loading} />
 
