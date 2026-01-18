@@ -8,5 +8,5 @@ export const GRID = {
   gap: 10,
 };
 
-// The Math: (Total Width - Outer Padding - Gaps between items) / Columns
+// (Total Width - Outer Padding - Gaps between items) / Columns
 export const ITEM_SIZE = (screenWidth - (GRID.padding * 2) - (GRID.gap * (GRID.columns - 1))) / GRID.columns;
