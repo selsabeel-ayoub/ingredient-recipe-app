@@ -1,7 +1,6 @@
 import { useRouter } from "expo-router";
 import { View, Text, ScrollView, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
-// import { getSavedUsername, getSavedPassword, setSavedUsername, setSavedPassword } from ".Things/globals";
 
 export default function Login() {
   const router = useRouter();
@@ -12,15 +11,6 @@ export default function Login() {
   const handleLogin = () => {
     // Add your login logic here
     if (username.length > 0 && password.length > 0) {
-      // Check if credentials match saved ones
-    //   const savedUser = getSavedUsername();
-    //   const savedPass = getSavedPassword();
-      
-      if (savedUser && (username !== savedUser || password !== savedPass)) {
-        setErrorMessage('ERROR: Invalid username or password!');
-        return;
-      }
-      
       console.log('Login attempt:', username);
       setErrorMessage(""); // Clear error message on successful login
       // For now, just navigate back to home
@@ -33,20 +23,7 @@ export default function Login() {
 
   const handleSignUp = () => {
     // Add your sign up logic here
-    if (username.length > 0 && password.length > 0) {
-      // Save username and password to global variables
-      setSavedUsername(username);
-      setSavedPassword(password);
-      
-      console.log('Sign up successful:', username);
-      console.log('Saved credentials - Username:', getSavedUsername(), 'Password:', getSavedPassword());
-      setErrorMessage(""); // Clear error message on successful sign up
-      // For now, just navigate back to home
-      router.back();
-    } else {
-      console.log('Please enter both username and password.');
-      setErrorMessage('ERROR 506: Please fill both Username and Password!');
-    }
+    console.log('Sign up clicked');
   };
 
   return (
@@ -71,6 +48,7 @@ export default function Login() {
         secureTextEntry
         autoCapitalize="none"
       />
+
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
@@ -81,6 +59,7 @@ export default function Login() {
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
+
       <TouchableOpacity
         style={styles.signUpButton}
         onPress={handleSignUp}
