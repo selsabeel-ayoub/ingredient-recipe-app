@@ -1,5 +1,7 @@
 # ChefSSS
 
+**Demo Video**: https://youtube.com/shorts/lx5bHeTpPuc?feature=share
+
 ## Inspiration:
 As first-year university students living in residence, we've been thriving off of our campus meal plan. Next year, we're probably going to need to cook for ourselves. We realized that the hardest part of cooking is usually just deciding what to make with whatever ingredients we have. We wanted to create a tool that simplifies the process.
 
