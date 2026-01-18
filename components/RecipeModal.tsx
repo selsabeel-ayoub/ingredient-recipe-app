@@ -72,17 +72,16 @@ export const RecipeModal = ({ visible, recipes, selectedRecipe, onSelectRecipe, 
             {recipes.map((recipe, index) => (
               <TouchableOpacity 
                 key={index}
-                style={styles.recipeOptionCard}
+                style={styles.recipeBookCard}
                 onPress={() => onSelectRecipe(recipe)}
                 activeOpacity={0.7}
               >
-                <View style={styles.recipeOptionContent}>
-                  <View style={styles.recipeNumberBadge}>
-                    <Text style={styles.recipeNumberText}>{index + 1}</Text>
-                  </View>
-                  <Text style={styles.recipeOptionName}>{recipe.name}</Text>
+                <View style={styles.bookSpine} />
+                <View style={styles.bookContent}>
+                  <Text style={styles.recipeBookNumber}>Recipe {index + 1}</Text>
+                  <Text style={styles.recipeBookTitle}>{recipe.name}</Text>
+                  <Text style={styles.tapToOpen}>Tap to open →</Text>
                 </View>
-                <Text style={styles.recipeOptionArrowIcon}>→</Text>
               </TouchableOpacity>
             ))}
           </View>
