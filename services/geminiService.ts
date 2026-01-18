@@ -11,11 +11,11 @@ export const generateFridgeRecipe = async (ingredients: string[]) => {
       model: "gemini-2.0-flash", 
       contents: [{ 
         role: "user", 
-        parts: [{ text: `I have: ${ingredients.join(", ")}. Suggest 1 recipe. Return ONLY a JSON object with: "name", "ingredients", "instructions". Do not include markdown.` }] 
+        parts: [{ text: `I have: ${ingredients.join(", ")}. Suggest 3 different recipes. Return ONLY a JSON array of objects, each with: "name", "ingredients", "instructions". Do not include markdown.` }] 
       }],
     });
 
-    let text = response.text || "{}";
+    let text = response.text || "[]";
     if (text.includes("```")) {
         text = text.replace(/```json|```/g, "").trim();
     }

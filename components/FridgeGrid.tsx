@@ -5,11 +5,20 @@ import { AddButton } from './AddButton';
 import { RecipeModal } from './RecipeModal';
 import { useFridge } from '../hooks/useFridge';
 import { globalStyles as styles, theme } from '../styles/theme';
-import { generateFridgeRecipe } from '../services/geminiService'; // Ensure this matches your service file
+import { generateFridgeRecipe } from '../services/geminiService';
 
 export default function FridgeGrid() {
-  const { items, recipe, loading, removeItem, addItem, getRecipe, setRecipe } = 
-    useFridge(['Carrots', 'Milk', 'Apple', "Eggplant", "Soysauce", "Cocoa Powder"]);
+  const { 
+    items, 
+    recipes, 
+    selectedRecipe, 
+    loading, 
+    removeItem, 
+    addItem, 
+    getRecipe, 
+    setSelectedRecipe,
+    closeRecipes 
+  } = useFridge(['Carrots', 'Milk', 'Apple', "Eggplant", "Soysauce", "Cocoa Powder"]);
 
   return (
     <View style={styles.container}>
@@ -34,14 +43,20 @@ export default function FridgeGrid() {
           <ActivityIndicator color={theme.colors.text} />
         ) : (
           <Text style={{ color: theme.colors.text, fontWeight: 'bold', fontSize: 18 }}>
-            Generate Recipe
+            Generate Recipes
           </Text>
         )}
       </TouchableOpacity>
 
       <AddButton onPress={addItem} />
 
-      <RecipeModal visible={!!recipe} recipe={recipe} onClose={() => setRecipe(null)} />
+      <RecipeModal 
+        visible={recipes.length > 0} 
+        recipes={recipes}
+        selectedRecipe={selectedRecipe}
+        onSelectRecipe={setSelectedRecipe}
+        onClose={closeRecipes} 
+      />
     </View>
   );
 }
