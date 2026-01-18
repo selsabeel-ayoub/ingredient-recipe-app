@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
-import FridgeGrid from '../components/FridgeGrid';  
+import { View } from "react-native";
+import FridgeGrid from '../components/FridgeGrid';
 
 export default function Home() {
   return (
