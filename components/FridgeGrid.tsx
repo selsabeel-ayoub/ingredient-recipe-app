@@ -20,7 +20,6 @@ import { RecipeModal } from "./RecipeModal";
 
 const FRIDGE_ITEMS_KEY = '@fridge_items';
 
-// Module-level flag that persists across component mounts
 let hasInitiallyLoaded = false;
 let cachedItems: FridgeItem[] = [];
 

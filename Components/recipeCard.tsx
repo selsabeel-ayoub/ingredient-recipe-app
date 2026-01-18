@@ -24,13 +24,17 @@ export default function RecipeCard({ name, ingredients, instructions, onDelete }
             
             <Text style={styles.sectionTitle}>Ingredients:</Text>
             <View style={styles.ingredientsList}>
-                {ingredients.map((ingredient, index) => (
-                    <Text key={index} style={styles.ingredientItem}>• {ingredient}</Text>
-                ))}
+                {Array.isArray(ingredients) && ingredients.length > 0 ? (
+                    ingredients.map((ingredient, index) => (
+                        <Text key={index} style={styles.ingredientItem}>• {ingredient}</Text>
+                    ))
+                ) : (
+                    <Text style={styles.ingredientItem}>No ingredients available</Text>
+                )}
             </View>
             
             <Text style={styles.sectionTitle}>Instructions:</Text>
-            <Text style={styles.cardDetails}>{instructions}</Text>
+            <Text style={styles.cardDetails}>{instructions || 'No instructions available'}</Text>
         </View>
     );
 }
